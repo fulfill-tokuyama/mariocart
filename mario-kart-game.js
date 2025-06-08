@@ -1095,8 +1095,16 @@ function animate(currentTime) {
 
 // ページロード時にゲーム開始
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('📱 ページロード完了、ゲーム初期化中...');
-    init();
+    const startButton = document.getElementById('startButton');
+    if (startButton) {
+        startButton.addEventListener('click', () => {
+            startButton.style.display = 'none';
+            init();
+        });
+    } else {
+        // ボタンが見つからない場合は自動開始（デバッグ用）
+        init();
+    }
 });
 
 // エラーハンドリング
