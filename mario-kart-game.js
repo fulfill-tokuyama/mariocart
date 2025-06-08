@@ -164,9 +164,9 @@ class TrackBuilder {
     }
     
     createGround() {
-        // 近未来都市の地面は暗めの色
+        // アスファルト風の地面
         const groundGeometry = new THREE.PlaneGeometry(2000, 2000);
-        const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x101828 });
+        const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x22232a });
         const ground = new THREE.Mesh(groundGeometry, groundMaterial);
         ground.rotation.x = -Math.PI / 2;
         ground.receiveShadow = true;
@@ -174,43 +174,47 @@ class TrackBuilder {
     }
 
     createBuildings() {
-        // ネオンブルー系の高層ビルを大量に配置
-        const buildingCount = 120;
-        for (let i = 0; i < buildingCount; i++) {
-            const width = 20 + Math.random() * 30;
-            const depth = 20 + Math.random() * 30;
-            const height = 200 + Math.random() * 400;
-            const x = (Math.random() - 0.5) * 1800;
-            const z = (Math.random() - 0.5) * 1800;
-            // コース中央付近は空ける
-            if (Math.abs(x) < 100 && Math.abs(z) < 900) continue;
-            const geometry = new THREE.BoxGeometry(width, height, depth);
-            const material = new THREE.MeshPhongMaterial({
-                color: 0x1ecfff,
-                emissive: 0x0ff0ff,
-                emissiveIntensity: 0.5,
-                shininess: 100,
-                transparent: true,
-                opacity: 0.95
-            });
-            const building = new THREE.Mesh(geometry, material);
-            building.position.set(x, height / 2, z);
-            building.castShadow = true;
-            building.receiveShadow = true;
-            this.scene.add(building);
+        // グリッド状にビルを配置
+        const gridSize = 10;
+        const spacing = 180;
+        for (let gx = -gridSize; gx <= gridSize; gx++) {
+            for (let gz = -gridSize; gz <= gridSize; gz++) {
+                // 道路中央付近は空ける
+                if (Math.abs(gx) < 2 && Math.abs(gz) < 6) continue;
+                const width = 40 + Math.random() * 30;
+                const depth = 40 + Math.random() * 30;
+                // 高層・低層を混ぜる
+                const height = (Math.random() < 0.7 ? 200 : 80) + Math.random() * 200;
+                const x = gx * spacing + (Math.random() - 0.5) * 40;
+                const z = gz * spacing + (Math.random() - 0.5) * 40;
+                const geometry = new THREE.BoxGeometry(width, height, depth);
+                const material = new THREE.MeshPhongMaterial({
+                    color: 0x222e3c,
+                    emissive: 0x00ffff,
+                    emissiveIntensity: 0.15 + Math.random() * 0.2,
+                    shininess: 60,
+                    transparent: true,
+                    opacity: 0.97
+                });
+                const building = new THREE.Mesh(geometry, material);
+                building.position.set(x, height / 2, z);
+                building.castShadow = true;
+                building.receiveShadow = true;
+                this.scene.add(building);
+            }
         }
     }
     
     createRaceTrack() {
-        // 4台分の幅（例: 32）
+        // 現実的な幅の道路（例: 32）
         const trackWidth = 32;
         const trackPoints = this.generateTrackPoints();
         // 直線道路の外側と内側
         const outerPoints = trackPoints.map(p => new THREE.Vector3(p.x + trackWidth / 2, p.y, p.z));
         const innerPoints = trackPoints.map(p => new THREE.Vector3(p.x - trackWidth / 2, p.y, p.z));
-        // トラック面を作成（ネオンブルーの道路）
+        // アスファルト色の道路
         const trackGeometry = this.createTrackGeometry(innerPoints, outerPoints);
-        const trackMaterial = new THREE.MeshLambertMaterial({ color: 0x0ff0ff, emissive: 0x1ecfff, emissiveIntensity: 0.3 });
+        const trackMaterial = new THREE.MeshLambertMaterial({ color: 0x444851 });
         const track = new THREE.Mesh(trackGeometry, trackMaterial);
         track.receiveShadow = true;
         this.scene.add(track);
@@ -228,7 +232,7 @@ class TrackBuilder {
             const t = i / segments;
             const x = startX;
             const z = startZ + (endZ - startZ) * t;
-            trackPoints.push(new THREE.Vector3(x, 10, z)); // 地面から10浮かせる
+            trackPoints.push(new THREE.Vector3(x, 0.1, z)); // 地面すれすれ
         }
         return trackPoints;
     }
@@ -304,10 +308,10 @@ class KartManager {
     
     createKarts() {
         const startPositions = [
-            new THREE.Vector3(-6, 11, -790),
-            new THREE.Vector3(-2, 11, -790),
-            new THREE.Vector3(2, 11, -790),
-            new THREE.Vector3(6, 11, -790)
+            new THREE.Vector3(-6, 1.1, -790),
+            new THREE.Vector3(-2, 1.1, -790),
+            new THREE.Vector3(2, 1.1, -790),
+            new THREE.Vector3(6, 1.1, -790)
         ];
         for (let i = 0; i < GameConfig.MAX_KARTS; i++) {
             const kart = this.createKart(i, startPositions[i]);
@@ -1050,10 +1054,10 @@ class GameEngine {
         
         // カートの位置をリセット
         const startPositions = [
-            new THREE.Vector3(-6, 11, -790),
-            new THREE.Vector3(-2, 11, -790),
-            new THREE.Vector3(2, 11, -790),
-            new THREE.Vector3(6, 11, -790)
+            new THREE.Vector3(-6, 1.1, -790),
+            new THREE.Vector3(-2, 1.1, -790),
+            new THREE.Vector3(2, 1.1, -790),
+            new THREE.Vector3(6, 1.1, -790)
         ];
         
         karts.forEach((kart, index) => {
