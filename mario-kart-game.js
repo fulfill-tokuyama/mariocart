@@ -163,7 +163,8 @@ class TrackBuilder {
     }
     
     createGround() {
-        const groundGeometry = new THREE.PlaneGeometry(200, 200);
+        // 空間を10倍に拡大
+        const groundGeometry = new THREE.PlaneGeometry(2000, 2000);
         const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
         const ground = new THREE.Mesh(groundGeometry, groundMaterial);
         ground.rotation.x = -Math.PI / 2;
@@ -172,21 +173,13 @@ class TrackBuilder {
     }
     
     createRaceTrack() {
-        const trackWidth = GameConfig.TRACK_WIDTH;
+        // 4台分の幅（例: 32）
+        const trackWidth = 32;
         const trackPoints = this.generateTrackPoints();
         
-        // トラック外側と内側の点を計算
-        const outerPoints = trackPoints.map(p => new THREE.Vector3(
-            p.x + Math.sin(Math.atan2(p.z, p.x)) * trackWidth,
-            p.y,
-            p.z - Math.cos(Math.atan2(p.z, p.x)) * trackWidth
-        ));
-        
-        const innerPoints = trackPoints.map(p => new THREE.Vector3(
-            p.x - Math.sin(Math.atan2(p.z, p.x)) * trackWidth,
-            p.y,
-            p.z + Math.cos(Math.atan2(p.z, p.x)) * trackWidth
-        ));
+        // 直線道路の外側と内側
+        const outerPoints = trackPoints.map(p => new THREE.Vector3(p.x + trackWidth / 2, p.y, p.z));
+        const innerPoints = trackPoints.map(p => new THREE.Vector3(p.x - trackWidth / 2, p.y, p.z));
         
         // トラック面を作成
         const trackGeometry = this.createTrackGeometry(innerPoints, outerPoints);
@@ -200,16 +193,18 @@ class TrackBuilder {
     }
     
     generateTrackPoints() {
+        // まっすぐ進む直線コース
         const trackPoints = [];
         const segments = GameConfig.TRACK_SEGMENTS;
-        
+        const startX = 0;
+        const startZ = -800; // 直線の始点
+        const endZ = 800;    // 直線の終点
         for (let i = 0; i <= segments; i++) {
-            const angle = (i / segments) * Math.PI * 2;
-            const x = Math.cos(angle) * 30 + Math.sin(angle * 2) * 10;
-            const z = Math.sin(angle) * 40 + Math.cos(angle * 3) * 5;
+            const t = i / segments;
+            const x = startX;
+            const z = startZ + (endZ - startZ) * t;
             trackPoints.push(new THREE.Vector3(x, 0.1, z));
         }
-        
         return trackPoints;
     }
     
@@ -217,7 +212,6 @@ class TrackBuilder {
         const geometry = new THREE.BufferGeometry();
         const vertices = [];
         const indices = [];
-        
         for (let i = 0; i < innerPoints.length - 1; i++) {
             vertices.push(
                 innerPoints[i].x, innerPoints[i].y, innerPoints[i].z,
@@ -225,50 +219,52 @@ class TrackBuilder {
                 innerPoints[i + 1].x, innerPoints[i + 1].y, innerPoints[i + 1].z,
                 outerPoints[i + 1].x, outerPoints[i + 1].y, outerPoints[i + 1].z
             );
-            
             const base = i * 4;
             indices.push(
                 base, base + 1, base + 2,
                 base + 1, base + 3, base + 2
             );
         }
-        
         geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
         geometry.setIndex(indices);
         geometry.computeVertexNormals();
-        
         return geometry;
     }
     
     createWalls() {
         if (!this.trackPoints) return;
-        
         const wallGeometry = new THREE.BoxGeometry(2, 3, 2);
         const wallMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
-        
-        for (let i = 0; i < this.trackPoints.length - 1; i += 3) {
-            const wall = new THREE.Mesh(wallGeometry, wallMaterial);
-            wall.position.copy(this.trackPoints[i]);
-            wall.position.y = 1.5;
-            wall.castShadow = true;
-            this.scene.add(wall);
+        // 直線道路の両端に壁を配置
+        for (let i = 0; i < this.trackPoints.length; i += 3) {
+            // 左側
+            const leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
+            leftWall.position.copy(this.trackPoints[i]);
+            leftWall.position.x -= 16;
+            leftWall.position.y = 1.5;
+            leftWall.castShadow = true;
+            this.scene.add(leftWall);
+            // 右側
+            const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
+            rightWall.position.copy(this.trackPoints[i]);
+            rightWall.position.x += 16;
+            rightWall.position.y = 1.5;
+            rightWall.castShadow = true;
+            this.scene.add(rightWall);
         }
     }
     
     createCheckpoints() {
-        const checkpointPositions = [
-            new THREE.Vector3(30, 1, 0),   // スタート
-            new THREE.Vector3(0, 1, 40),   // 上
-            new THREE.Vector3(-30, 1, 0),  // 左
-            new THREE.Vector3(0, 1, -40)   // 下
-        ];
-        
-        checkpointPositions.forEach((pos, index) => {
+        // 直線上に複数のチェックポイントを配置
+        checkpoints.length = 0;
+        const numCheckpoints = 10;
+        for (let i = 0; i < numCheckpoints; i++) {
+            const z = -800 + (1600 / (numCheckpoints - 1)) * i;
             checkpoints.push({
-                position: pos,
-                index: index
+                position: new THREE.Vector3(0, 1, z),
+                index: i
             });
-        });
+        }
     }
 }
 
@@ -282,24 +278,21 @@ class KartManager {
     }
     
     createKarts() {
+        // 直線道路のスタート付近中央に4台並べる
         const startPositions = [
-            new THREE.Vector3(30, 1, 0),
-            new THREE.Vector3(32, 1, 2),
-            new THREE.Vector3(32, 1, -2),
-            new THREE.Vector3(34, 1, 0)
+            new THREE.Vector3(-6, 1, -790),
+            new THREE.Vector3(-2, 1, -790),
+            new THREE.Vector3(2, 1, -790),
+            new THREE.Vector3(6, 1, -790)
         ];
-        
         for (let i = 0; i < GameConfig.MAX_KARTS; i++) {
             const kart = this.createKart(i, startPositions[i]);
             this.karts.push(kart);
             this.scene.add(kart);
-            
             if (i === 0) {
                 playerKart = kart;
             }
         }
-        
-        // グローバル配列に設定
         karts = this.karts;
     }
     
@@ -1033,10 +1026,10 @@ class GameEngine {
         
         // カートの位置をリセット
         const startPositions = [
-            new THREE.Vector3(30, 1, 0),
-            new THREE.Vector3(32, 1, 2),
-            new THREE.Vector3(32, 1, -2),
-            new THREE.Vector3(34, 1, 0)
+            new THREE.Vector3(-6, 1, -790),
+            new THREE.Vector3(-2, 1, -790),
+            new THREE.Vector3(2, 1, -790),
+            new THREE.Vector3(6, 1, -790)
         ];
         
         karts.forEach((kart, index) => {
