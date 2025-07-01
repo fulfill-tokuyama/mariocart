@@ -3,30 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マリオカート風レーシングゲーム</title>
+    <title>【株式会社〇〇不動産】- 〇〇市で心安らぐ住まいを</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="gameContainer">
-        <button id="startButton" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2em;padding:1em 2em;z-index:2000;">スタート</button>
-        <div id="ui">
-            <div>ラップ: <span id="lap">1</span>/3</div>
-            <div>順位: <span id="position">1</span>/4</div>
-            <div>時間: <span id="time">0:00</span></div>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h2>【株式会社〇〇不動産】</h2>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="#service" class="nav-link">事業内容</a></li>
+                        <li><a href="#about" class="nav-link">会社概要</a></li>
+                        <li><a href="#contact" class="nav-link">お問い合わせ</a></li>
+                    </ul>
+                </nav>
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
         </div>
-        
-        <div id="controls">
-            <div>操作: WASD or 矢印キー</div>
-            <div>アイテム使用: スペースキー</div>
-            <div>ドリフト: Shift + ハンドル</div>
-        </div>
-        
-        <div id="minimap"></div>
-        <div id="speedometer">0 km/h</div>
-        <div id="itemDisplay" style="display: none;"></div>
-    </div>
+    </header>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="mario-kart-game.js"></script>
+    <!-- メインビジュアル -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <h1>【〇〇市で心安らぐ住まいを。】</h1>
+            <p>【私たちは、お客様一人ひとりに寄り添ったお部屋探しをお手伝いします。】</p>
+        </div>
+    </section>
+
+    <!-- 事業内容 -->
+    <section id="service" class="service">
+        <div class="container">
+            <h2 class="section-title">事業内容</h2>
+            <div class="service-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z" stroke="#0055A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>賃貸仲介</h3>
+                    <p>【お客様の希望を丁寧にヒアリングし、最適な物件をご提案します。】</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="#0055A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 22V12H15V22" stroke="#0055A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>物件管理</h3>
+                    <p>【オーナー様に代わり、入居者募集から建物の維持管理までトータルでサポートします。】</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V18C20 18.5304 19.7893 19.0391 19.4142 19.4142C19.0391 19.7893 18.5304 20 18 20H6C5.46957 20 4.96086 19.7893 4.58579 19.4142C4.21071 19.0391 4 18.5304 4 18V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4H8" stroke="#0055A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15 2H9C8.44772 2 8 2.44772 8 3V5C8 5.55228 8.44772 6 9 6H15C15.5523 6 16 5.55228 16 5V3C16 2.44772 15.5523 2 15 2Z" stroke="#0055A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>売買仲介</h3>
+                    <p>【豊富な知識と経験で、大切な資産の売買を円滑に進めます。】</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 会社概要 -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">会社概要</h2>
+            <div class="about-content">
+                <table class="company-info">
+                    <tr>
+                        <th>会社名</th>
+                        <td>【株式会社〇〇不動産】</td>
+                    </tr>
+                    <tr>
+                        <th>代表者</th>
+                        <td>【代表取締役 〇〇 太郎】</td>
+                    </tr>
+                    <tr>
+                        <th>所在地</th>
+                        <td>【〒XXX-XXXX 〇〇県〇〇市〇〇町1-2-3】</td>
+                    </tr>
+                    <tr>
+                        <th>TEL</th>
+                        <td>【00-1234-5678】</td>
+                    </tr>
+                    <tr>
+                        <th>FAX</th>
+                        <td>【00-1234-5679】</td>
+                    </tr>
+                    <tr>
+                        <th>営業時間</th>
+                        <td>【10:00～18:00】</td>
+                    </tr>
+                    <tr>
+                        <th>定休日</th>
+                        <td>【水曜日、年末年始】</td>
+                    </tr>
+                    <tr>
+                        <th>免許番号</th>
+                        <td>【〇〇県知事(1)第XXXXX号】</td>
+                    </tr>
+                    <tr>
+                        <th>所属団体</th>
+                        <td>【(公社)全国宅地建物取引業保証協会】</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- お問い合わせ -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">お問い合わせ</h2>
+            <div class="contact-content">
+                <p class="contact-intro">お電話または下記フォームよりお気軽にご相談ください。</p>
+                <div class="contact-phone">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1468 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.2165 3.36162C2.30513 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06579 2.16708 8.43376 2.48353C8.80173 2.79999 9.04207 3.23945 9.10999 3.72C9.23662 4.68007 9.47144 5.62273 9.80999 6.53C9.94454 6.88792 9.97366 7.27691 9.8939 7.65088C9.81415 8.02485 9.62886 8.36811 9.35999 8.64L8.08999 9.91C9.51355 12.4135 11.5865 14.4864 14.09 15.91L15.36 14.64C15.6319 14.3711 15.9751 14.1858 16.3491 14.1061C16.7231 14.0263 17.1121 14.0555 17.47 14.19C18.3773 14.5286 19.3199 14.7634 20.28 14.89C20.7658 14.9585 21.2094 15.2032 21.5265 15.5775C21.8437 15.9518 22.0122 16.4296 22 16.92Z" stroke="#0055A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>【00-1234-5678】</span>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">お名前 <span class="required">必須</span></label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">メールアドレス <span class="required">必須</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">お問い合わせ内容 <span class="required">必須</span></label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">送信</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 【株式会社〇〇不動産】. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
